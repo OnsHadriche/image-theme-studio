@@ -73,7 +73,7 @@ export async function swapOrder(
   const j = index + dir;
   if (j < 0 || j >= list.length) return;
   const reordered = [...list];
-  [reordered[index], reordered[j]] = [reordered[j], reordered[index]];
+  [reordered[index], reordered[j]] = [reordered[j]!, reordered[index]!];
   const results = await Promise.all(
     reordered.map((item, i) => supabase.from(table).update({ display_order: i }).eq("id", item.id)),
   );

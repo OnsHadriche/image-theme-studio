@@ -21,7 +21,7 @@ export function EmptyState({ title, children }: { title: string; children?: Reac
   );
 }
 
-export function Thumb({ src, alt }: { src?: string; alt: string }) {
+export function Thumb({ src, alt }: { src?: string | undefined; alt: string }) {
   return src ? (
     <img src={src} alt={alt} className="h-12 w-12 shrink-0 rounded-xl object-cover" />
   ) : (

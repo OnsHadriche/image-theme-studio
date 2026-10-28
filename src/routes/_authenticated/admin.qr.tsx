@@ -37,7 +37,10 @@ function QrPage() {
 
   function print() {
     const w = window.open("", "_blank");
-    if (!w) return toast.error("Allow pop-ups to print.");
+    if (!w) {
+      toast.error("Allow pop-ups to print.");
+      return;
+    }
     w.document.write(`<!doctype html><html><head><title>${RESTAURANT_NAME} — QR</title>
       <link href="https://api.fontshare.com/v2/css?f[]=satoshi@400,700&display=swap" rel="stylesheet">
       <style>body{font-family:Satoshi,sans-serif;display:flex;align-items:center;justify-content:center;min-height:100vh;margin:0;color:#063E9E;background:#fff}

@@ -19,7 +19,7 @@ import { useInvalidateMenu, useMenuData } from "@/hooks/use-menu-data";
 import { type Article, type Category, errorMessage, formatPrice, swapOrder, uploadImage } from "@/lib/menu";
 
 export const Route = createFileRoute("/_authenticated/admin/articles")({
-  validateSearch: (s: Record<string, unknown>): { new?: boolean } => (s.new ? { new: true } : {}),
+  validateSearch: (s: Record<string, unknown>): { new?: boolean } => (s["new"] ? { new: true } : {}),
   component: ArticlesPage,
 });
 
@@ -153,7 +153,7 @@ function ArticlesPage() {
 function ArticleForm({
   article, categories, defaultCategory, currentImage, nextOrder, onClose, onSaved,
 }: {
-  article: Article | null; categories: Category[]; defaultCategory?: string; currentImage?: string;
+  article: Article | null; categories: Category[]; defaultCategory?: string | undefined; currentImage?: string | undefined;
   nextOrder: (categoryId: string) => number; onClose: () => void; onSaved: () => void;
 }) {
   const [name, setName] = useState(article?.name ?? "");
@@ -162,12 +162,12 @@ function ArticleForm({
   const [categoryId, setCategoryId] = useState(article?.category_id ?? defaultCategory ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [keepImage, setKeepImage] = useState(!!article?.image_url);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<"name" | "price" | "category" | "image", string>>>({});
   const [busy, setBusy] = useState(false);
 
   async function save(e: React.FormEvent) {
     e.preventDefault();
-    const errs: Record<string, string> = {};
+    const errs: Partial<Record<"name" | "price" | "category" | "image", string>> = {};
     const p = Number(price.replace(",", "."));
     if (!name.trim()) errs.name = "Name is required.";
     if (price.trim() === "" || !Number.isFinite(p) || p < 0) errs.price = "Enter a valid price (0 or more).";

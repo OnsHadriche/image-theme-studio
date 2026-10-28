@@ -10,11 +10,11 @@ export function ImagePicker({
   error,
   onError,
 }: {
-  currentUrl?: string;
+  currentUrl?: string | undefined;
   file: File | null;
   onFile: (f: File) => void;
   onClear: () => void;
-  error?: string;
+  error?: string | undefined;
   onError: (msg: string) => void;
 }) {
   const [preview, setPreview] = useState<string | undefined>();

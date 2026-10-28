@@ -18,7 +18,7 @@ import { useInvalidateMenu, useMenuData } from "@/hooks/use-menu-data";
 import { type Category, errorMessage, swapOrder, uploadImage } from "@/lib/menu";
 
 export const Route = createFileRoute("/_authenticated/admin/categories")({
-  validateSearch: (s: Record<string, unknown>): { new?: boolean } => (s.new ? { new: true } : {}),
+  validateSearch: (s: Record<string, unknown>): { new?: boolean } => (s["new"] ? { new: true } : {}),
   component: CategoriesPage,
 });
 
@@ -140,13 +140,13 @@ function CategoriesPage() {
 function CategoryForm({
   category, currentImage, nextOrder, onClose, onSaved,
 }: {
-  category: Category | null; currentImage?: string; nextOrder: number; onClose: () => void; onSaved: () => void;
+  category: Category | null; currentImage?: string | undefined; nextOrder: number; onClose: () => void; onSaved: () => void;
 }) {
   const [name, setName] = useState(category?.name ?? "");
   const [description, setDescription] = useState(category?.description ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [keepImage, setKeepImage] = useState(!!category?.image_url);
-  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [errors, setErrors] = useState<Partial<Record<"name" | "price" | "category" | "image", string>>>({});
   const [busy, setBusy] = useState(false);
 
   async function save(e: React.FormEvent) {
