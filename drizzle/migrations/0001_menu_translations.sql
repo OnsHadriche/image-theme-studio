@@ -1,0 +1,2 @@
+ALTER TABLE public.categories ADD COLUMN name_en text, ADD COLUMN name_ar text, ADD COLUMN description_en text, ADD COLUMN description_ar text;
+ALTER TABLE public.menu_articles ADD COLUMN name_en text, ADD COLUMN name_ar text, ADD COLUMN description_en text, ADD COLUMN description_ar text;

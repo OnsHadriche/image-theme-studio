@@ -18,28 +18,40 @@ export type Database = {
         Row: {
           created_at: string
           description: string | null
+          description_ar: string | null
+          description_en: string | null
           display_order: number
           id: string
           image_url: string | null
           name: string
+          name_ar: string | null
+          name_en: string | null
           updated_at: string
         }
         Insert: {
           created_at?: string
           description?: string | null
+          description_ar?: string | null
+          description_en?: string | null
           display_order?: number
           id?: string
           image_url?: string | null
           name: string
+          name_ar?: string | null
+          name_en?: string | null
           updated_at?: string
         }
         Update: {
           created_at?: string
           description?: string | null
+          description_ar?: string | null
+          description_en?: string | null
           display_order?: number
           id?: string
           image_url?: string | null
           name?: string
+          name_ar?: string | null
+          name_en?: string | null
           updated_at?: string
         }
         Relationships: []
@@ -49,10 +61,14 @@ export type Database = {
           category_id: string
           created_at: string
           description: string | null
+          description_ar: string | null
+          description_en: string | null
           display_order: number
           id: string
           image_url: string | null
           name: string
+          name_ar: string | null
+          name_en: string | null
           price: number
           updated_at: string
         }
@@ -60,10 +76,14 @@ export type Database = {
           category_id: string
           created_at?: string
           description?: string | null
+          description_ar?: string | null
+          description_en?: string | null
           display_order?: number
           id?: string
           image_url?: string | null
           name: string
+          name_ar?: string | null
+          name_en?: string | null
           price: number
           updated_at?: string
         }
@@ -71,10 +91,14 @@ export type Database = {
           category_id?: string
           created_at?: string
           description?: string | null
+          description_ar?: string | null
+          description_en?: string | null
           display_order?: number
           id?: string
           image_url?: string | null
           name?: string
+          name_ar?: string | null
+          name_en?: string | null
           price?: number
           updated_at?: string
         }
