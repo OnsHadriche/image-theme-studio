@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EmptyState, PageHeader, Thumb } from "@/components/admin/PageHeader";
 import { ImagePicker } from "@/components/admin/ImagePicker";
+import { TranslationFields, emptyTranslations, translationsPayload } from "@/components/admin/TranslationFields";
 import { useInvalidateMenu, useMenuData } from "@/hooks/use-menu-data";
 import { type Category, errorMessage, swapOrder, uploadImage } from "@/lib/menu";
 
@@ -144,6 +145,7 @@ function CategoryForm({
 }) {
   const [name, setName] = useState(category?.name ?? "");
   const [description, setDescription] = useState(category?.description ?? "");
+  const [tr, setTr] = useState(() => emptyTranslations(category));
   const [file, setFile] = useState<File | null>(null);
   const [keepImage, setKeepImage] = useState(!!category?.image_url);
   const [errors, setErrors] = useState<Partial<Record<"name" | "price" | "category" | "image", string>>>({});
@@ -156,7 +158,7 @@ function CategoryForm({
     try {
       let image_url = keepImage ? category?.image_url ?? null : null;
       if (file) image_url = await uploadImage(file);
-      const payload = { name: name.trim(), description: description.trim() || null, image_url };
+      const payload = { name: name.trim(), description: description.trim() || null, image_url, ...translationsPayload(tr) };
       const { error } = category
         ? await supabase.from("categories").update(payload).eq("id", category.id)
         : await supabase.from("categories").insert({ ...payload, display_order: nextOrder });
@@ -172,7 +174,7 @@ function CategoryForm({
 
   return (
     <Dialog open onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="rounded-3xl">
+      <DialogContent className="max-h-[90vh] overflow-y-auto rounded-3xl">
         <DialogHeader><DialogTitle>{category ? "Edit category" : "New category"}</DialogTitle></DialogHeader>
         <form onSubmit={save} className="space-y-4">
           <div className="space-y-2">
@@ -184,6 +186,7 @@ function CategoryForm({
             <Label htmlFor="cdesc">Description (optional)</Label>
             <Textarea id="cdesc" value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
+          <TranslationFields value={tr} onChange={setTr} />
           <div className="space-y-2">
             <Label>Image (optional)</Label>
             <ImagePicker

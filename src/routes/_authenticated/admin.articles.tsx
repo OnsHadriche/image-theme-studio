@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/alert-dialog";
 import { EmptyState, PageHeader, Thumb } from "@/components/admin/PageHeader";
 import { ImagePicker } from "@/components/admin/ImagePicker";
+import { TranslationFields, emptyTranslations, translationsPayload } from "@/components/admin/TranslationFields";
 import { useInvalidateMenu, useMenuData } from "@/hooks/use-menu-data";
 import { type Article, type Category, errorMessage, formatPrice, swapOrder, uploadImage } from "@/lib/menu";
 
@@ -158,6 +159,7 @@ function ArticleForm({
 }) {
   const [name, setName] = useState(article?.name ?? "");
   const [description, setDescription] = useState(article?.description ?? "");
+  const [tr, setTr] = useState(() => emptyTranslations(article));
   const [price, setPrice] = useState(article ? String(article.price) : "");
   const [categoryId, setCategoryId] = useState(article?.category_id ?? defaultCategory ?? "");
   const [file, setFile] = useState<File | null>(null);
@@ -178,7 +180,7 @@ function ArticleForm({
     try {
       let image_url = keepImage ? article?.image_url ?? null : null;
       if (file) image_url = await uploadImage(file);
-      const payload = { name: name.trim(), description: description.trim() || null, price: p, category_id: categoryId, image_url };
+      const payload = { name: name.trim(), description: description.trim() || null, price: p, category_id: categoryId, image_url, ...translationsPayload(tr) };
       const moved = article && article.category_id !== categoryId;
       const { error } = article
         ? await supabase.from("menu_articles").update(moved ? { ...payload, display_order: nextOrder(categoryId) } : payload).eq("id", article.id)
@@ -207,6 +209,7 @@ function ArticleForm({
             <Label htmlFor="adesc">Description</Label>
             <Textarea id="adesc" value={description} onChange={(e) => setDescription(e.target.value)} />
           </div>
+          <TranslationFields value={tr} onChange={setTr} />
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="aprice">Price</Label>
