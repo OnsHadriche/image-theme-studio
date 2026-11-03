@@ -1,34 +1,18 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
-import { Button } from "@/components/ui/button";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { MENU_SLUG, RESTAURANT_NAME } from "@/lib/menu";
 
 export const Route = createFileRoute("/")({
+  beforeLoad: () => {
+    throw redirect({ to: "/menu/$slug", params: { slug: MENU_SLUG }, replace: true });
+  },
   head: () => ({
     meta: [
-      { title: `${RESTAURANT_NAME} — Digital Menu` },
-      { name: "description", content: `Browse the digital menu of ${RESTAURANT_NAME}.` },
-      { property: "og:title", content: `${RESTAURANT_NAME} — Digital Menu` },
-      { property: "og:description", content: `Browse the digital menu of ${RESTAURANT_NAME}.` },
+      { title: `${RESTAURANT_NAME} — Menu` },
+      { name: "description", content: `Découvrez le menu de ${RESTAURANT_NAME}.` },
+      { property: "og:title", content: `${RESTAURANT_NAME} — Menu` },
+      { property: "og:description", content: `Découvrez le menu de ${RESTAURANT_NAME}.` },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: Index,
 });
-
-function Index() {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-8 bg-background px-6 text-center">
-      <div>
-        <p className="text-xs font-medium uppercase tracking-[0.3em] text-muted-foreground">Digital menu</p>
-        <h1 className="mt-3 text-5xl font-bold tracking-tight text-primary md:text-6xl">{RESTAURANT_NAME}</h1>
-      </div>
-      <div className="flex flex-wrap justify-center gap-3">
-        <Button asChild size="lg" className="rounded-full">
-          <Link to="/menu/$slug" params={{ slug: MENU_SLUG }}>View the menu</Link>
-        </Button>
-        <Button asChild size="lg" variant="outline" className="rounded-full">
-          <Link to="/admin">Administration</Link>
-        </Button>
-      </div>
-    </div>
-  );
-}
