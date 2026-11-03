@@ -161,6 +161,13 @@ function ArticleForm({
   const [description, setDescription] = useState(article?.description ?? "");
   const [tr, setTr] = useState(() => emptyTranslations(article));
   const [price, setPrice] = useState(article ? String(article.price) : "");
+  const [priceLabel, setPriceLabel] = useState(article?.price_label ?? "");
+  const [extras, setExtras] = useState<{ label: string; price: string }[]>(
+    () => ((article?.extra_prices as { label: string; price: number }[] | null) ?? []).map((x) => ({ label: x.label, price: String(x.price) })),
+  );
+  const [tags, setTags] = useState<string[]>(article?.tags ?? []);
+  const [tagInput, setTagInput] = useState("");
+  const addTag = (t: string) => { const v = t.trim(); if (v && !tags.includes(v)) setTags([...tags, v]); setTagInput(""); };
   const [categoryId, setCategoryId] = useState(article?.category_id ?? defaultCategory ?? "");
   const [file, setFile] = useState<File | null>(null);
   const [keepImage, setKeepImage] = useState(!!article?.image_url);
@@ -173,6 +180,8 @@ function ArticleForm({
     const p = Number(price.replace(",", "."));
     if (!name.trim()) errs.name = "Name is required.";
     if (price.trim() === "" || !Number.isFinite(p) || p < 0) errs.price = "Enter a valid price (0 or more).";
+    const extraParsed = extras.filter((x) => x.label.trim() || x.price.trim()).map((x) => ({ label: x.label.trim(), price: Number(x.price.replace(",", ".")) }));
+    if (extraParsed.some((x) => !x.label || !Number.isFinite(x.price) || x.price < 0)) errs.price = "Each extra price needs a label and a valid amount.";
     if (!categories.some((c) => c.id === categoryId)) errs.category = "Choose a category.";
     setErrors(errs);
     if (Object.keys(errs).length) return;
@@ -180,7 +189,7 @@ function ArticleForm({
     try {
       let image_url = keepImage ? article?.image_url ?? null : null;
       if (file) image_url = await uploadImage(file);
-      const payload = { name: name.trim(), description: description.trim() || null, price: p, category_id: categoryId, image_url, ...translationsPayload(tr) };
+      const payload = { name: name.trim(), description: description.trim() || null, price: p, category_id: categoryId, image_url, price_label: priceLabel.trim() || null, extra_prices: extraParsed, tags, ...translationsPayload(tr) };
       const moved = article && article.category_id !== categoryId;
       const { error } = article
         ? await supabase.from("menu_articles").update(moved ? { ...payload, display_order: nextOrder(categoryId) } : payload).eq("id", article.id)
@@ -228,6 +237,36 @@ function ArticleForm({
                 </SelectContent>
               </Select>
               {errors.category && <p className="text-sm text-destructive">{errors.category}</p>}
+            </div>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="aplabel">Main price label (optional, e.g. “5 pcs”)</Label>
+            <Input id="aplabel" value={priceLabel} onChange={(e) => setPriceLabel(e.target.value)} />
+          </div>
+          <div className="space-y-2">
+            <Label>Other sizes / prices</Label>
+            {extras.map((x, i) => (
+              <div key={i} className="flex gap-2">
+                <Input placeholder="Label (e.g. 4 pcs)" value={x.label} onChange={(e) => setExtras(extras.map((y, j) => j === i ? { ...y, label: e.target.value } : y))} />
+                <Input placeholder="DT" inputMode="decimal" className="w-28" value={x.price} onChange={(e) => setExtras(extras.map((y, j) => j === i ? { ...y, price: e.target.value } : y))} />
+                <Button type="button" size="icon" variant="ghost" aria-label="Remove price" onClick={() => setExtras(extras.filter((_, j) => j !== i))}><Trash2 className="h-4 w-4 text-destructive" /></Button>
+              </div>
+            ))}
+            <Button type="button" variant="outline" size="sm" className="rounded-full" onClick={() => setExtras([...extras, { label: "", price: "" }])}><Plus className="h-4 w-4" /> Add a price</Button>
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="atag">Labels</Label>
+            <div className="flex flex-wrap gap-1.5">
+              {tags.map((t) => (
+                <button type="button" key={t} onClick={() => setTags(tags.filter((x) => x !== t))} className="rounded-full bg-secondary px-3 py-1 text-xs font-medium">{t} ×</button>
+              ))}
+            </div>
+            <Input id="atag" placeholder="Type a label and press Enter" value={tagInput} onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter" || e.key === ",") { e.preventDefault(); addTag(tagInput); } }} />
+            <div className="flex flex-wrap gap-1.5">
+              {["Iconique", "Végétarien", "Fait maison", "Épicé", "Nouveau"].filter((t) => !tags.includes(t)).map((t) => (
+                <button type="button" key={t} onClick={() => addTag(t)} className="rounded-full border px-3 py-1 text-xs text-muted-foreground hover:text-primary">+ {t}</button>
+              ))}
             </div>
           </div>
           <div className="space-y-2">
