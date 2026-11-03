@@ -64,12 +64,15 @@ export type Database = {
           description_ar: string | null
           description_en: string | null
           display_order: number
+          extra_prices: Json
           id: string
           image_url: string | null
           name: string
           name_ar: string | null
           name_en: string | null
           price: number
+          price_label: string | null
+          tags: string[]
           updated_at: string
         }
         Insert: {
@@ -79,12 +82,15 @@ export type Database = {
           description_ar?: string | null
           description_en?: string | null
           display_order?: number
+          extra_prices?: Json
           id?: string
           image_url?: string | null
           name: string
           name_ar?: string | null
           name_en?: string | null
           price: number
+          price_label?: string | null
+          tags?: string[]
           updated_at?: string
         }
         Update: {
@@ -94,12 +100,15 @@ export type Database = {
           description_ar?: string | null
           description_en?: string | null
           display_order?: number
+          extra_prices?: Json
           id?: string
           image_url?: string | null
           name?: string
           name_ar?: string | null
           name_en?: string | null
           price?: number
+          price_label?: string | null
+          tags?: string[]
           updated_at?: string
         }
         Relationships: [
