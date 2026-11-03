@@ -76,9 +76,9 @@ function QrPage() {
             )}
           </div>
           <div className="flex flex-wrap gap-2">
-            <Button className="rounded-full" disabled={!png} onClick={() => download(png, "monaco-menu-qr.png")}><Download className="h-4 w-4" /> PNG</Button>
+            <Button className="rounded-full" disabled={!png} onClick={() => download(png, "milos-menu-qr.png")}><Download className="h-4 w-4" /> PNG</Button>
             <Button variant="outline" className="rounded-full" disabled={!svg}
-              onClick={() => download(URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })), "monaco-menu-qr.svg")}>
+              onClick={() => download(URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" })), "milos-menu-qr.svg")}>
               <Download className="h-4 w-4" /> SVG
             </Button>
             <Button variant="outline" className="rounded-full" disabled={!png} onClick={print}><Printer className="h-4 w-4" /> Print</Button>

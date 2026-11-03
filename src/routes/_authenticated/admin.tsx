@@ -33,8 +33,8 @@ function Nav({ onNavigate }: { onNavigate?: () => void }) {
   return (
     <div className="flex h-full flex-col bg-sidebar p-5 text-sidebar-foreground">
       <div className="px-2 pb-8 pt-2">
-        <p className="text-2xl font-bold tracking-tight">Monaco.</p>
-        <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.3em] opacity-70">Club Gammarth · Admin</p>
+        <p className="text-2xl font-bold tracking-tight">Milos.</p>
+        <p className="mt-1 text-[10px] font-medium uppercase tracking-[0.3em] opacity-70">Street food grecque · Admin</p>
       </div>
       <nav className="flex-1 space-y-1">
         {NAV.map((item) => {
@@ -105,7 +105,7 @@ function AdminLayout() {
         <Nav />
       </aside>
       <header className="flex items-center justify-between border-b bg-card px-4 py-3 md:hidden">
-        <p className="text-lg font-bold text-primary">Monaco.</p>
+        <p className="text-lg font-bold text-primary">Milos.</p>
         <Button variant="ghost" size="icon" onClick={() => setOpen(true)} aria-label="Open menu">
           <MenuIcon className="h-5 w-5" />
         </Button>
