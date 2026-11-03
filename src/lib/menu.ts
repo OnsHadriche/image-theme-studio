@@ -4,7 +4,7 @@ import type { Tables } from "@/integrations/supabase/types";
 export type Category = Tables<"categories">;
 export type Article = Tables<"menu_articles">;
 
-export const RESTAURANT_NAME = "Monaco Club Gammarth";
+export const RESTAURANT_NAME = "Milos";
 export const MENU_SLUG = "monaco-club-gammarth";
 export const IMAGE_BUCKET = "menu-images";
 export const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
