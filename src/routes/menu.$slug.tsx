@@ -167,9 +167,19 @@ function PublicMenu() {
                       </button>
                       <p className="pe-6 font-display text-lg font-semibold text-primary">{la.name}</p>
                       {la.description && <p className="mt-1 text-sm text-muted-foreground">{la.description}</p>}
-                      <span dir="ltr" className="mt-3 inline-block rounded-full bg-primary px-3 py-1 text-sm font-bold text-primary-foreground">
-                        {formatPrice(a.price)}
-                      </span>
+                      {a.tags.length > 0 && (
+                        <div className="mt-2 flex flex-wrap gap-1.5">
+                          {a.tags.map((tg) => <span key={tg} className="rounded-full bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground">{tg}</span>)}
+                        </div>
+                      )}
+                      <div dir="ltr" className="mt-3 flex flex-wrap gap-2">
+                        {[{ label: a.price_label, price: a.price }, ...((a.extra_prices as { label: string; price: number }[] | null) ?? [])].map((p, i) => (
+                          <span key={i} className="inline-flex items-baseline gap-1.5 rounded-full bg-primary px-3 py-1 text-sm text-primary-foreground">
+                            {p.label && <span className="font-normal opacity-90">{p.label}</span>}
+                            <span className="font-bold">{formatPrice(p.price)}</span>
+                          </span>
+                        ))}
+                      </div>
                     </div>
                   </div>
                 );
